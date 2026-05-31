@@ -172,6 +172,19 @@ export default function InventoryPage() {
     }
   }
 
+  function handleDelete(item: InventoryItem) {
+    const confirmed = window.confirm(
+      `Delete "${item.name}"? This action cannot be undone.`,
+    );
+    if (!confirmed) return;
+
+    setInventoryList((prev) => prev.filter((i) => i.id !== item.id));
+
+    if (editingId === item.id) {
+      closeModal();
+    }
+  }
+
   const inputClass = (field: keyof FormState) =>
     `mt-1.5 w-full rounded-lg border px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 ${
       errors[field]
@@ -300,13 +313,22 @@ export default function InventoryPage() {
                     <td className="px-5 py-4 text-slate-600">{item.unit}</td>
                     <td className="px-5 py-4 text-slate-600">{item.supplier}</td>
                     <td className="px-5 py-4">
-                      <button
-                        type="button"
-                        onClick={() => openEditModal(item)}
-                        className="text-sm font-semibold text-rose-600 transition-colors hover:text-rose-700"
-                      >
-                        Edit
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => openEditModal(item)}
+                          className="text-sm font-semibold text-rose-600 transition-colors hover:text-rose-700"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(item)}
+                          className="text-sm font-semibold text-slate-500 transition-colors hover:text-rose-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

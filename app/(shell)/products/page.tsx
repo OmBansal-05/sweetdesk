@@ -179,6 +179,22 @@ export default function ProductsPage() {
     }
   }
 
+  function handleDelete(product: Product) {
+    const confirmed = window.confirm(
+      `Delete "${product.name}"? This action cannot be undone.`,
+    );
+    if (!confirmed) return;
+
+    setProductList((prev) => prev.filter((p) => p.id !== product.id));
+
+    if (selectedId === product.id) {
+      setSelectedId(null);
+    }
+    if (editingId === product.id) {
+      closeModal();
+    }
+  }
+
   function SortButton({ field, label }: { field: SortField; label: string }) {
     const active = sortBy === field;
     return (
@@ -374,13 +390,22 @@ export default function ProductsPage() {
                     </dd>
                   </div>
                 </dl>
-                <button
-                  type="button"
-                  onClick={() => openEditModal(selected)}
-                  className="mt-6 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
-                >
-                  Edit product
-                </button>
+                <div className="mt-6 space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => openEditModal(selected)}
+                    className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
+                  >
+                    Edit product
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(selected)}
+                    className="w-full rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700"
+                  >
+                    Delete product
+                  </button>
+                </div>
               </div>
             </aside>
           </>

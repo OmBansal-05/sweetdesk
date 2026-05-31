@@ -160,6 +160,19 @@ export default function OrdersPage() {
     }
   }
 
+  function handleDelete(order: Order) {
+    const confirmed = window.confirm(
+      `Delete order ${order.id}? This action cannot be undone.`,
+    );
+    if (!confirmed) return;
+
+    setOrderList((prev) => prev.filter((o) => o.id !== order.id));
+
+    if (editingId === order.id) {
+      closeModal();
+    }
+  }
+
   const inputClass = (field: keyof FormState) =>
     `mt-1.5 w-full rounded-lg border px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 ${
       errors[field]
@@ -270,13 +283,22 @@ export default function OrdersPage() {
                       <StatusBadge status={order.status} />
                     </td>
                     <td className="px-5 py-4">
-                      <button
-                        type="button"
-                        onClick={() => openEditModal(order)}
-                        className="text-sm font-semibold text-rose-600 transition-colors hover:text-rose-700"
-                      >
-                        Edit
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => openEditModal(order)}
+                          className="text-sm font-semibold text-rose-600 transition-colors hover:text-rose-700"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(order)}
+                          className="text-sm font-semibold text-slate-500 transition-colors hover:text-rose-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

@@ -126,6 +126,19 @@ export default function CustomersPage() {
     }
   }
 
+  function handleDelete(customer: Customer) {
+    const confirmed = window.confirm(
+      `Delete "${customer.name}"? This action cannot be undone.`,
+    );
+    if (!confirmed) return;
+
+    setCustomerList((prev) => prev.filter((c) => c.id !== customer.id));
+
+    if (editingId === customer.id) {
+      closeModal();
+    }
+  }
+
   const inputClass = (field: keyof FormState) =>
     `mt-1.5 w-full rounded-lg border px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 ${
       errors[field]
@@ -221,13 +234,22 @@ export default function CustomersPage() {
                   <p className="font-semibold text-slate-900">{customer.joined}</p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => openEditModal(customer)}
-                className="mt-4 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
-              >
-                Edit customer
-              </button>
+              <div className="mt-4 space-y-3">
+                <button
+                  type="button"
+                  onClick={() => openEditModal(customer)}
+                  className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
+                >
+                  Edit customer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(customer)}
+                  className="w-full rounded-lg border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-600 transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700"
+                >
+                  Delete customer
+                </button>
+              </div>
             </div>
           ))}
         </div>
